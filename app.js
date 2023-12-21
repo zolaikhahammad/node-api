@@ -5,6 +5,7 @@ const fileUpload = require('express-fileupload');
 const mongooseConnect = require('./database/database');
 const feedRoutes = require("./routes/feed");
 const authRoutes = require("./routes/auth");
+const companyRoutes = require("./routes/company/company");
 
 const app = express();
 app.use(fileUpload());
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use("/feed", feedRoutes);
 app.use("/auth", authRoutes);
+app.use('/company', companyRoutes);
 app.use((error, req, res, next) => {
     console.log(error);
     return res.status(error.statusCode ? error.statusCode:500).json({"message":error.message});
