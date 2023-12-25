@@ -32,21 +32,17 @@ const companySchema = new mongoose.Schema({
     },
     created_by: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
-        default: null,
+        ref: "Users"
     },
     created_at: {
-        type: Date,
-        default: Date.now,
+        type: Date
     },
     updated_by: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
-        default: null,
+        ref: "Users"
     },
     updated_at: {
-        type: Date,
-        default: Date.now,
+        type: Date
     },
 });
 

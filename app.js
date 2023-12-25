@@ -10,10 +10,10 @@ const defaultHeaders =  require('./middleware/default-headers');
 const errorHandler = require('./middleware/error-handling');
 
 const app = express();
+
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(defaultHeaders);
 app.use(swagger);
 app.use('/', routes);

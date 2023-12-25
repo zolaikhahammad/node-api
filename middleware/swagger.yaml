@@ -1,0 +1,77 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Company API"
+  description: "API for managing company information"
+
+tags:
+  - name: "Company"
+    description: "Operations related to companies"
+
+paths:
+  /company/{companyId}:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        type: string
+        description: "ID of the company"
+    get:
+      summary: "Get Company Information"
+      description: "Retrieves information about a specific company."
+      tags: ["Company"]  # Assign the operation to the "Company" tag
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Company loaded"
+              response:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Example Company"
+                  address:
+                    type: string
+                    example: "123 Main St"
+                  phone_number:
+                    type: string
+                    example: "555-1234"
+                  logo:
+                    type: string
+                    example: "company_logo.png"
+                  is_deleted:
+                    type: boolean
+                    example: false
+                  is_address_public:
+                    type: boolean
+                    example: false
+                  is_active:
+                    type: boolean
+                    example: true
+                  created_by:
+                    type: string
+                    example: "user123"
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2023-01-01T12:00:00Z"
+                  updated_by:
+                    type: string
+                    example: "user456"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: "2023-01-02T08:30:00Z"
+        404:
+          description: "Company not found"
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Company not found"
