@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 
-const mongooseConnect = require('./database/database');
-const routes = require('./routes');
-const swagger = require('./middleware/swagger');
-const defaultHeaders =  require('./middleware/default-headers');
-const errorHandler = require('./middleware/error-handling');
+const mongooseConnect = require('./src/database/database');
+const routes = require('./src/routes/index');
+const swagger = require('./src/middlewares/swagger');
+const defaultHeaders =  require('./src/middlewares/default-headers');
+const errorHandler = require('./src/middlewares/error-handling');
 
 const app = express();
 

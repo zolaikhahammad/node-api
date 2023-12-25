@@ -1,7 +1,7 @@
 const express = require('express');
 const { check, body } = require('express-validator');
-const feedsController = require('../controller/feed');
-const isAuth = require('../middleware/auth-guard');
+const feedsController = require('../controllers/feed');
+const isAuth = require('../middlewares/auth-guard');
 const router = express.Router();
 
 router.get("/posts", isAuth, feedsController.getPosts);

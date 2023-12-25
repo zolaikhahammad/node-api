@@ -1,6 +1,6 @@
 const express = require('express');
-const feedRoutes = require('../routes/feed');
-const authRoutes = require('../routes//auth');
+const feedRoutes = require('./feed');
+const authRoutes = require('./auth');
 const companyRoutes = require('./company');
 
 const router = express.Router();

@@ -4,7 +4,7 @@ const { INTEGER, BOOLEAN, DATE } = require('sequelize');
 const companySchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
+        require: true,
     },
     address: {
         type: String,

@@ -1,46 +1,25 @@
 require('dotenv').config()
 
-const Company = require("../../models/company/company");
-const Helper = require('../../util/helper');
-const Constants = require('../../util/constants');
-const Base = require('./base');
-const Logs = require('../../models/logs/logs');
+const Base = require('../base');
+const Company = require("../models/company");
 
-module.exports = new class CompanyHandler extends Base {
 
-    constructor(_req, _res, _next) {
-        super(_req, _res, _next);
-    }
+module.exports = new class CompanyRepository extends Base {
 
-    async add() {
-        try {
-            let imageName;
+    async add(companyData) {
 
-            if (this.validateFileUpload()) {
-                imageName = await this.uploadImage();
-            }
-
-            const company = new Company({
-                name: this.req.body.name,
-                logo: imageName,
-                address: this.req.body.address,
-                phone_number: this.req.body.phone_number,
-                created_by: this.req.userId,
-                created_at: Date.now(),
-            });
-
-            await company.save();
-
-            return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                message: "company created",
-                response: company
-            });
-
-        }
-        catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
-        }
-    }
+        const company = new Company({
+          name: companyData.name,
+          logo: companyData.imageName,
+          address: companyData.address,
+          phone_number: companyData.phone_number,
+          created_by: companyData.created_by,
+          created_at: Date.now(),
+        });
+    
+        await company.save();    
+        return company;
+      }
 
     async delete(companyId) {
         try {
@@ -158,27 +137,6 @@ module.exports = new class CompanyHandler extends Base {
         }
     }
 
-    //#region Helper Methods
 
-    validateFileUpload() {
-        return this.req.files && this.req.files.length > 0
-    }
-
-    async uploadImage() {
-        let imageName;
-
-        const { image } = this.req.files;
-        imageName = Helper.getCurrentISODateString() + "_" + image.name;
-
-        image.mv(Helper.getFormattedImageName(process.env.FILE_PATH, imageName), (err) => {
-            if (err) {
-
-            }
-        });
-
-        return imageName;
-    }
-
-    //#endregion
 }
 
