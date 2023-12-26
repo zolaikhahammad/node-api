@@ -4,9 +4,9 @@ const router  = express.Router();
 const isAuth = require('../middlewares/auth-guard');
 const companyController = require('../controllers/company');
 
-// router.delete("/delete/:companyId",isAuth, companyController.deleteCompany);
+router.delete("/delete/:companyId",isAuth, companyController.deleteCompany);
 
-// router.get("/get/:companyId",isAuth, companyController.getCompanyById);
+router.get("/get/:companyId",isAuth, companyController.getCompanyById);
 // router.get("/getall/:status",isAuth, companyController.getCompanies);
 
 router.post("/add",isAuth, companyController.addCompany);

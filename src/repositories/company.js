@@ -1,24 +1,29 @@
 require('dotenv').config()
 
-const Base = require('../base');
+const Constants = require('../utils/constants');
 const Company = require("../models/company");
+const ErrorHandler = require('../errorHandler');
 
-
-module.exports = new class CompanyRepository extends Base {
+module.exports = new class CompanyRepository {
 
     async add(companyData) {
 
-        const company = new Company({
-          name: companyData.name,
-          logo: companyData.imageName,
-          address: companyData.address,
-          phone_number: companyData.phone_number,
-          created_by: companyData.created_by,
-          created_at: Date.now(),
-        });
-    
-        await company.save();    
-        return company;
+        try {
+            const company = new Company({
+                name: companyData.name,
+                logo: companyData.imageName,
+                address: companyData.address,
+                phone_number: companyData.phone_number,
+                created_by: companyData.created_by,
+                created_at: Date.now(),
+              });
+          
+              await company.save();    
+              return company;
+        }
+        catch (error) {
+             throw new Error('Error in CompanyRepository.add: ' + error.message);
+        }
       }
 
     async delete(companyId) {
@@ -32,17 +37,14 @@ module.exports = new class CompanyRepository extends Base {
                 });
                 const companyNotFound = !company;
                 if (companyNotFound) {
-                    this.error(Constants.StatusCodes.NOT_FOUND, "company not found");
+                    const error = new Error("company not found");
+                    error.statusCode = Constants.StatusCodes.NOT_FOUND;
+                    throw error;
                 }
-                else {
-                    return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                        message: "company deleted",
-                        response: null
-                    });
-                }
+                return company;
         }
         catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
+            throw new Error('Error in CompanyRepository.delete: ' + error.message);
         }
     }
 
@@ -53,13 +55,10 @@ module.exports = new class CompanyRepository extends Base {
                 is_deleted: false
             }).exec();
 
-            return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                message: "company loaded",
-                response: company
-            });
+            return company;
         }
         catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
+            throw new Error('Error in CompanyRepository.get: ' + error.message);
         }
     }
 

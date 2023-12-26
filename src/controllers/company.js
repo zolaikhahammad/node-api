@@ -1,9 +1,9 @@
-const Base = require('../base');
+const ErrorHandler = require('../errorHandler');
 const CompanyService = require('../services/company');
 
-class CompanyController extends Base {
+class CompanyController {
 
-    async addCompany(req, res, next) {
+    async addCompany(req, res) {
         try {
 
             const companyRequest = {
@@ -16,7 +16,29 @@ class CompanyController extends Base {
             return await CompanyService.addCompany(companyRequest, res);
         }
         catch (error) {
-            super.handleServerError(next);
+            ErrorHandler.handleServerError(res, error);
+        }
+    }
+
+    async deleteCompany(req, res) {
+        try {
+            const companyID = req.params.companyId;
+
+            return await CompanyService.deleteCompany(companyID, res);
+        }
+        catch (error) {
+            ErrorHandler.handleServerError(res, error);
+        }
+    }
+
+    async getCompanyById(req, res) {
+        try {
+            const companyID = req.params.companyId;
+
+            return await CompanyService.getCompanyByID(companyID, res);
+        }
+        catch (error) {
+            ErrorHandler.handleServerError(res, error);
         }
     }
 }
