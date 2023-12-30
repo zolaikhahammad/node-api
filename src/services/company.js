@@ -48,6 +48,21 @@ class CompanyService {
     }
   }
 
+  async getAllCompaniesByStatus(status, res) {
+    try {
+
+      const company = await CompanyRepository.getAll(status);
+
+      return res.status(Constants.StatusCodes.SUCCESS).json({
+        message: "Companies loaded",
+        response: company
+      });
+    }
+    catch (error) {
+      ErrorHandler.handleServerError(res, error);
+    }
+  }
+
   async getCompanyByID(companyId, res) {
     try {
 
@@ -62,6 +77,51 @@ class CompanyService {
       ErrorHandler.handleServerError(res, error);
     }
   }
+
+  async updateCompany(companyObj, res) {
+
+    try {
+      let imageName;
+
+      if (this.validateFileUpload(companyObj.file)) {
+        imageName = await this.uploadImage(companyObj.file);
+      }
+
+      const company = await CompanyRepository.updateCompany({
+        companyId: companyObj.companyID,
+        name: companyObj.name,
+        imageName: imageName,
+        address: companyObj.address,
+        phone_number: companyObj.phone_number,
+        created_by: companyObj.created_by
+      });
+
+      return res.status(Constants.StatusCodes.SUCCESS).json({
+        message: "Company created",
+        response: company
+      });
+
+    }
+    catch (error) {
+      ErrorHandler.handleServerError(res, error);
+    }
+  }
+
+  async updateStatus(companyID, status, res) {
+    try {
+
+      const company = await CompanyRepository.updateStatus(companyID,status);
+
+      return res.status(Constants.StatusCodes.SUCCESS).json({
+        message: "Company status updated",
+        response: company
+      });
+    }
+    catch (error) {
+      ErrorHandler.handleServerError(res, error);
+    }
+  }
+
 
   //#region Helper Methods
 

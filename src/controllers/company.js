@@ -31,11 +31,52 @@ class CompanyController {
         }
     }
 
+    async getAllCompaniesByStatus(req, res) {
+        try {
+            const status = req.params.status;
+
+            return await CompanyService.getAllCompaniesByStatus(status, res);
+        }
+        catch (error) {
+            ErrorHandler.handleServerError(res, error);
+        }
+    }
+
     async getCompanyById(req, res) {
         try {
             const companyID = req.params.companyId;
 
             return await CompanyService.getCompanyByID(companyID, res);
+        }
+        catch (error) {
+            ErrorHandler.handleServerError(res, error);
+        }
+    }
+
+    async updateStatus(req, res) {
+        try {
+            const companyID = req.params.companyId
+            const status = req.params.status;
+
+            return await CompanyService.updateStatus(companyID, status, res);
+        }
+        catch (error) {
+            ErrorHandler.handleServerError(res, error);
+        }
+    }
+
+    async updateCompany(req, res) {
+        try {
+            const companyRequest = {
+                companyID: req.params.companyId,
+                name: req.body.name,
+                file: req.files,
+                address: req.body.address,
+                phone_number: req.body.phone_number,
+                created_by: req.userId,
+            }
+
+            return await CompanyService.updateCompany(companyRequest, res);
         }
         catch (error) {
             ErrorHandler.handleServerError(res, error);

@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fileUpload = require('express-fileupload');
-
-const mongooseConnect = require('./src/database/database');
 const routes = require('./src/routes/index');
 const swagger = require('./src/middlewares/swagger');
 const defaultHeaders =  require('./src/middlewares/default-headers');
@@ -18,8 +16,9 @@ app.use(defaultHeaders);
 app.use(swagger);
 app.use('/', routes);
 app.use(errorHandler);
-mongooseConnect(() => {
-    app.listen(3001, () => {
-        console.log(`Server is running on http://localhost:${3001}`);
-    });
-});
+app.listen(3001);
+// mongooseConnect(() => {
+//     app.listen(3001, () => {
+//         console.log(`Server is running on http://localhost:${3001}`);
+//     });
+// });

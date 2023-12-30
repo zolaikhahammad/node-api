@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {nodeJsConnection} = require('../database/database');
 const { INTEGER, BOOLEAN, DATE } = require('sequelize');
 
 const companySchema = new mongoose.Schema({
@@ -46,5 +47,5 @@ const companySchema = new mongoose.Schema({
     },
 });
 
-const Company = mongoose.model('Company', companySchema);
+const Company = nodeJsConnection.model('Company', companySchema);
 module.exports = Company;

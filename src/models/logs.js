@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const {nodeJsConnection} = require('../database/database');
 const logsSchema = new mongoose.Schema({
     error: {
         type: String
@@ -31,5 +31,5 @@ const logsSchema = new mongoose.Schema({
     },
 });
 
-const Logs = mongoose.model('Logs', logsSchema);
+const Logs = nodeJsConnection.model('Logs', logsSchema);
 module.exports = Logs;

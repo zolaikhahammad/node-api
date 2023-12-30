@@ -16,15 +16,15 @@ module.exports = new class CompanyRepository {
                 phone_number: companyData.phone_number,
                 created_by: companyData.created_by,
                 created_at: Date.now(),
-              });
-          
-              await company.save();    
-              return company;
+            });
+
+            await company.save();
+            return company;
         }
         catch (error) {
-             throw new Error('Error in CompanyRepository.add: ' + error.message);
+            throw new Error('Error in CompanyRepository.add: ' + error.message);
         }
-      }
+    }
 
     async delete(companyId) {
         try {
@@ -35,13 +35,13 @@ module.exports = new class CompanyRepository {
                 {
                     new: true
                 });
-                const companyNotFound = !company;
-                if (companyNotFound) {
-                    const error = new Error("company not found");
-                    error.statusCode = Constants.StatusCodes.NOT_FOUND;
-                    throw error;
-                }
-                return company;
+            const companyNotFound = !company;
+            if (companyNotFound) {
+                const error = new Error("company not found");
+                error.statusCode = Constants.StatusCodes.NOT_FOUND;
+                throw error;
+            }
+            return company;
         }
         catch (error) {
             throw new Error('Error in CompanyRepository.delete: ' + error.message);
@@ -69,51 +69,23 @@ module.exports = new class CompanyRepository {
                 is_active: Boolean(status.toLowerCase())
             }).exec();
 
-            return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                message: "companies loaded",
-                response: company
-            });
+            return company;
         }
         catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
+            throw new Error('Error in CompanyRepository.getAll: ' + error.message);
         }
     }
 
-    async updateStatus(companyId, status) {
+    async updateCompany(companyData) {
         try {
-            const company = await Company.findByIdAndUpdate(companyId,
+
+            const company = await Company.findByIdAndUpdate(companyData.companyID,
                 {
-                    is_active: Boolean(status)
-                },
-                {
-                    new: true
-                });
-
-            return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                message: "company status updated",
-                response: company
-            });
-        }
-        catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
-        }
-    }
-
-    async update(companyid) {
-        try {
-            let imageName;
-
-            if (this.validateFileUpload()) {
-                imageName = await this.uploadImage();
-            }
-
-            const company = await Company.findByIdAndUpdate(companyid,
-                {
-                    name: this.req.body.name,
-                    logo: imageName,
-                    address: this.req.body.address,
-                    phone_number: this.req.body.phone_number,
-                    updated_by: this.req.userId,
+                    name: companyData.name,
+                    logo: companyData.imageName,
+                    address: companyData.address,
+                    phone_number: companyData.phone_number,
+                    updated_by: companyData.userId,
                     updated_at: Date.now(),
                 },
                 {
@@ -122,17 +94,37 @@ module.exports = new class CompanyRepository {
 
             const companyNotFound = !company;
             if (companyNotFound) {
-                this.error(Constants.StatusCodes.NOT_FOUND, "company not found");
+                const error = new Error("company not found");
+                error.statusCode = Constants.StatusCodes.NOT_FOUND;
+                throw error;
             }
-            else {
-                return this.res.status(Constants.StatusCodes.SUCCESS).json({
-                    message: "company updated",
-                    response: company
-                });
-            }
+            return company;
         }
         catch (error) {
-            this.error(Constants.StatusCodes.SERVER_ERROR, "server error: " + error);
+            throw new Error('Error in CompanyRepository.update: ' + error.message);
+        }
+    }
+
+    async updateStatus(companyId, status) {
+        try {
+            const company = await Company.findOneAndUpdate(
+                {
+                    _id: mongoose.Types.ObjectId(companyId)
+                },
+                {
+                    $set:{
+                        is_active: Boolean(status)
+                    },
+                },
+                
+                {
+                    new: true
+                });
+
+            return company;
+        }
+        catch (error) {
+            throw new Error('Error in CompanyRepository.updateStatus: ' + error.message);
         }
     }
 
